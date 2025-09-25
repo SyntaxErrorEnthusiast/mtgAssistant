@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+pydantic
+python-dotenv
+anthropic
+fastmcp
+strands-agents
+httpx
+pytest
+pytest-asyncio
+requestsf
+lask
+flask-cors
+chromadb
+sentence-transformers
