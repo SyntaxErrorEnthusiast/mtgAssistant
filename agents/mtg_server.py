@@ -34,7 +34,7 @@ MCP_SERVERS = {
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # tighten later for production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -162,11 +162,6 @@ def create_app() -> FastAPI:
 
     @app.post("/chat", response_model=ChatOut)
     def chat(body: ChatIn):
-        # lightweight domain gate; the prompt already enforces MTG-only
-        banned = ["weather", "politics", "python", "stocks", "crypto", "kotlin", "aws "]
-        if any(b in body.message.lower() for b in banned):
-            return ChatOut(reply="I only answer Magic: The Gathering questions. What MTG topic can I help with?")
-
         app.state.sessions.setdefault(body.session_id, []).append({"role": "user", "content": body.message})
         try:
             result = app.state.agent(body.message)
@@ -182,5 +177,4 @@ app = create_app()
 
 if __name__ == "__main__":
     import uvicorn
-    # Use the module path to enable --reload behavior
     uvicorn.run("mtg_server:app", host="127.0.0.1", port=8008, reload=True)
