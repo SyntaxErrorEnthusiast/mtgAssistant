@@ -65,6 +65,10 @@ SYSTEM_PROMPT = """
 
   <reasoning>
     - If multiple results appear, select the closest match by card name. Ask the user to clarify if uncertain.
+    - Look for interactions between multiple cards
+    - Analyze combo potential
+    - Consider how cards work together strategically
+    - Analyze how any information can be used if the user wants to build a deck
   </reasoning>
 
   <output_style>
@@ -73,9 +77,9 @@ SYSTEM_PROMPT = """
 
   <examples>
     <ex>
-        User: "What does Wilhelt do?" → Tool: search_cards("Wilhelt, the Rotcleaver") → 
+        User: "What does Wilhelt do?" → Tool: search_cards("Wilhelt, the Rotcleaver") →
         Return: Name: name
-                Mana Cost: mana_cost 
+                Mana Cost: mana_cost
                 Text: oracle_text
                 Price: prices
         </ex>
