@@ -124,6 +124,7 @@ def create_anthropic_model(system_prompt="", temperature=0.3):
         },
         max_tokens=1028,
         model_id="claude-3-5-haiku-20241022",
+        # model_id="claude-sonnet-4-0",
         params={
             "temperature": temperature,
             "system": system_prompt
