@@ -1,128 +1,58 @@
-# Strands MCP Agent
+# MTG Assistant
 
-A Python application that combines Strands agents with Fast MCP (Model Context Protocol) for containerized deployment on NAS systems.
+An AI-powered Magic: The Gathering assistant with rules lookup and card search capabilities.
 
 ## Features
 
-- **Strands Agents**: AI-powered agents using Claude API
-- **Fast MCP Integration**: Model Context Protocol server for tool integration
-- **FastAPI Web Interface**: RESTful API for agent interactions
-- **Docker Support**: Ready for containerization and NAS deployment
-- **Health Monitoring**: Built-in health checks and logging
+- **Card Search**: Query MTG cards using Scryfall API
+- **Rules Lookup**: Search official MTG rules and rulings
+- **Chat Interface**: Interactive web-based chat UI
+- **MCP Integration**: Modular tools via Model Context Protocol
 
 ## Quick Start
 
-### Local Development
+1. **Setup Environment**
+   ```bash
+   # Create .env file with your Claude API key
+   echo "CLAUDE_API_KEY=your_key_here" > .env
 
-1. **Install Dependencies**
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
+   # Install Python dependencies
+   pip install -r requirements.txt
 
-2. **Configure Environment**
-Make sure your `.env` file contains:
-```
-CLAUDE_API_KEY=your_claude_api_key_here
-```
+   # Install frontend dependencies
+   cd mtg-chat-frontend && npm install
+   ```
 
-3. **Run the Application**
-```bash
-python app.py
-```
+2. **Start Services**
+   ```bash
+   # Run the startup script (Windows)
+   scripts/start_servers.bat
 
-The application will start on `http://localhost:8000`
+   # Or start manually:
+   # Terminal 1: python mcp/scryfall_mcp_server.py
+   # Terminal 2: python mcp/mtg_rules_mcp_server.py
+   # Terminal 3: python agents/mtg_server.py
+   # Terminal 4: cd mtg-chat-frontend && npm run dev
+   ```
 
-### Docker Deployment
+3. **Open Browser**
+   - Frontend: http://localhost:5173
+   - API: http://localhost:8008
 
-1. **Build and Run with Docker Compose**
-```bash
-docker-compose up --build
-```
+## Architecture
 
-2. **Or build manually**
-```bash
-docker build -t strands-mcp-agent .
-docker run -p 8000:8000 --env-file .env strands-mcp-agent
-```
+- **Frontend**: React + TypeScript + Vite
+- **Backend**: FastAPI + Strands Agent Framework
+- **MCP Servers**: Scryfall API integration, MTG rules database
+- **AI Model**: Claude 3.5 Haiku
 
-## API Endpoints
+## Usage
 
-- `GET /` - Service status
-- `GET /health` - Health check
-- `POST /agent/chat` - Chat with Strands agent
-
-### Example Usage
-
-```bash
-curl -X POST "http://localhost:8000/agent/chat" \
-     -H "Content-Type: application/json" \
-     -d '{"message": "Hello, how can you help me?", "agent_type": "default"}'
-```
-
-## MCP Server
-
-The Fast MCP server provides tools that can be integrated with the agents:
-
-- `get_system_info` - Get system information
-- `echo_message` - Echo messages back
-- `process_data` - Process arbitrary data
-
-Run the MCP server standalone:
-```bash
-python mcp/server.py
-```
-
-## Project Structure
-
-```
-├── agents/              # Strands agent implementations
-├── mcp/                # Fast MCP server and tools
-├── config/             # Configuration files
-├── scripts/            # Utility scripts
-├── tests/              # Test files
-├── app.py              # Main FastAPI application
-├── requirements.txt    # Python dependencies
-├── Dockerfile          # Container configuration
-└── docker-compose.yml  # Multi-container setup
-```
-
-## Configuration
-
-### MCP Configuration
-Edit `config/mcp_config.json` to configure MCP servers and tools.
-
-### Environment Variables
-- `CLAUDE_API_KEY` - Your Anthropic Claude API key
-- `PORT` - Application port (default: 8000)
+Ask questions like:
+- "What does Lightning Bolt do?"
+- "Show me blue counterspells under 3 mana"
+- "What are the rules for combat damage?"
 
 ## Development
 
-### Running Tests
-```bash
-pytest tests/
-```
-
-### Adding New Agents
-1. Create new agent class in `agents/`
-2. Implement the agent interface
-3. Register in the main application
-
-### Adding MCP Tools
-1. Add tools to `mcp/server.py`
-2. Update configuration in `config/mcp_config.json`
-3. Test with the agent integration
-
-## Deployment on NAS
-
-This application is designed to run on NAS systems with Docker support:
-
-1. Copy the project to your NAS
-2. Ensure Docker and Docker Compose are installed
-3. Run `docker-compose up -d` for background deployment
-4. Access via your NAS IP on port 8000
-
-## License
-
-MIT License
+The project uses MCP (Model Context Protocol) for modular tool integration. Each MCP server provides specific capabilities that the AI agent can use to answer MTG-related questions.
